@@ -11,7 +11,7 @@ function BasicExample() {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
             <Nav.Link href="/campaignlist">Campaign Liste</Nav.Link>
-            <Nav.Link href="/createCampaign/123">Create Campaign</Nav.Link>
+            <Nav.Link href="/createCampaign">Create Campaign</Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>

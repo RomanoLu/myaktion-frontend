@@ -3,94 +3,97 @@ import Tab from 'react-bootstrap/Tab';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Tabs from 'react-bootstrap/Tabs';
-import Alert from 'react-bootstrap/Alert';
+import { useParams } from 'react-router-dom';
 import axios from "axios";
-import { useNavigate } from 'react-router-dom';
 
+function EditCampaign() {
+  const { dynamicProp } = useParams();
+  const [campaign, setCampaign] = useState({});
+  const [account, setAccount] = useState({});
+  const [name, setName] = useState("");
+  const [spendenziel, setSpendenziel] = useState("");
+  const [spendenbetrag, setSpendenbetrag] = useState("");
+  const [iban, setIban] = useState("");
+  const [bankname, setBankname] = useState("");  
+  const [nameacc, setnameacc] = useState('');
 
-
-function CreateCampaign() {
-  const navigate = useNavigate();
-  const [campaign, setCampaign] = useState({});  
-  const [account] = useState({});
-  const [success, setSuccess] = useState(false);
+  useEffect(() => {
+    axios.get(`http://localhost:8443/organizer/campaign/${dynamicProp}`)
+      .then(res => {
+        setCampaign(res.data);
+        setName(res.data.name);
+        setSpendenziel(res.data.targetAmount);
+        setSpendenbetrag(res.data.donationMinimum);
+        setIban(res.data.account.iban);
+        setBankname(res.data.account.nameOfBank);
+        setnameacc(res.data.account.name);
+        setAccount(res.data.account)
+      })
+      .catch(err => console.log(err));
+  }, [dynamicProp]);
 
   const handleNameChange = (event) => {
+    setName(event.target.value);
     setCampaign({...campaign, name: event.target.value});
   }
 
   const handleSpendenzielChange = (event) => {
+    setSpendenziel(event.target.value);
     setCampaign({...campaign, targetAmount: event.target.value});
   }
 
   const handleSpendenbetragChange = (event) => {
+    setSpendenbetrag(event.target.value);
     setCampaign({...campaign, donationMinimum: event.target.value});
   }
 
   const handleIbanChange = (event) => {
+    setIban(event.target.value);
     setCampaign({...account, iban: event.target.value});    
     setCampaign({...campaign, account: account});
   }
 
   const handleBanknameChange = (event) => {
+    setBankname(event.target.value);
     setCampaign({...account, nameOfBank: event.target.value});
     setCampaign({...campaign, account: account});
 
   }
 
   const handleAccNameChange = (event) =>{
+    setnameacc(event.target.value);
     setCampaign({...account, name: event.target.value});
     setCampaign({...campaign, account: account});
   }
-    
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    axios.post(`http://localhost:8443/organizer/campaign/`, campaign)
-      .then(res =>{
-        console.log(res);
-        setSuccess(true)
-      } )
+    axios.put(`http://localhost:8443/organizer/campaign/${dynamicProp}`, campaign)
+      .then(res => console.log(res))
       .catch(err => console.log(err));
   }
 
-  useEffect(() => {
-    let timeoutId;
-    if (success) {
-      timeoutId = setTimeout(() => {
-        setSuccess(false);
-        navigate('/campaignlist'); 
-      }, 3000);
-    }
-    return () => clearTimeout(timeoutId);
-  }, [success, navigate]);
-
   return (
     <>
-    <div>
     <h1 style={{ textAlign: "left" }} >Aktionen Editieren</h1>
-    {
-
-    }
-    {success && <Alert key={'success'} variant={'success'}>Campaign erfolgreich gespeichert!</Alert>}
-  </div>
     <div style={{ marginLeft: "10%", marginRight: "10%", width: "60%" }}>
 
         <Tabs
-            defaultActiveKey="home"
+            defaultActiveKey="profile"
             className="mb-3"
         >
             <Tab eventKey="home" title="Allgemein">
                 <Form onSubmit={handleSubmit}>
                     <Form.Group className="mb-3" controlId="formBasicEmail">
                         <Form.Label>Name</Form.Label>
-                        <Form.Control type="text" placeholder="Enter name of your campaign " onChange={handleNameChange} />
+                        <Form.Control type="text" placeholder="Enter name of your campaign " value={name} onChange={handleNameChange} />
                         <Form.Label>Spendenziel</Form.Label>
-                        <Form.Control type="text" placeholder="Enter Your donaitiongoal" onChange={handleSpendenzielChange} />
+                        <Form.Control type="text" placeholder="Enter Your donaitiongoal" value={spendenziel} onChange={handleSpendenzielChange} />
                         <Form.Label>Spendenbetrag</Form.Label>
-                        <Form.Control type="text" placeholder="Enter the donaitionamount" onChange={handleSpendenbetragChange} />
+                        <Form.Control type="text" placeholder="Enter the donaitionamount" value={spendenbetrag} onChange={handleSpendenbetragChange} />
                     </Form.Group>
                     <Form.Group className="mb-3" controlId="formBasicButton">
-                        <Button variant="primary" type="submit">
+                        <Button variant="primary" type="submit" href="/campaignList">
                             Speichern
                         </Button>
                         <Button variant="secondary" type="" href="/campaignList">
@@ -100,7 +103,7 @@ function CreateCampaign() {
 
 
                     <Form.Text className="text-muted">
-                    Erstellen Sie hier ihre Campaign Info
+                    Änderen Sie hier ihre Campaign Info
                     </Form.Text>
                 </Form>
             </Tab>
@@ -108,14 +111,14 @@ function CreateCampaign() {
                 <Form onSubmit={handleSubmit}>
                     <Form.Group className="mb-3" controlId="formBasicEmail">
                         <Form.Label>Name</Form.Label>
-                        <Form.Control type="text" placeholder="Enter Your name"  onChange={handleAccNameChange} />
+                        <Form.Control type="text" placeholder="Enter Your name" value={nameacc} onChange={handleAccNameChange} />
                         <Form.Label>IBAN</Form.Label>
-                        <Form.Control type="text" placeholder="Enter Your IBAN"  onChange={handleIbanChange} />
+                        <Form.Control type="text" placeholder="Enter Your IBAN" value={iban} onChange={handleIbanChange} />
                         <Form.Label>Name der Bank</Form.Label>
-                        <Form.Control type="text" placeholder="Enter the name of Your bank" onChange={handleBanknameChange} />
+                        <Form.Control type="text" placeholder="Enter the name of Your bank" value={bankname} onChange={handleBanknameChange} />
                     </Form.Group>
                     <Form.Group className="mb-3" controlId="formBasicButton">
-                        <Button variant="primary" type="submit" >
+                        <Button variant="primary" type="submit" href="/campaignList">
                             Speichern
                         </Button>
                         <Button variant="secondary" type="" href="/campaignList">
@@ -125,7 +128,7 @@ function CreateCampaign() {
 
 
                     <Form.Text className="text-muted">
-                    Erstellen Sie hier ihre Account Info
+                        Änderen Sie hier ihre Account Info
                     </Form.Text>
                 </Form>
             </Tab>
@@ -136,4 +139,4 @@ function CreateCampaign() {
 );
 }
 
-export default CreateCampaign;
+export default EditCampaign;

@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Axios from "axios";
 import React from 'react';
 
+
 class CampaignList extends React.Component {
     constructor() {
         super();
@@ -24,16 +25,24 @@ class CampaignList extends React.Component {
             console.log(error);
           });
       }
-
-
-
-
-
+        delete_Campaign = (event) =>{
+            console.log("Event Value: " + event.target.value);
+            Axios.delete("http://localhost:8443/organizer/campaign/" + event.target.value)
+            .then((response) => {
+                console.log(response);
+                const campaigns = this.state.campaigns.filter((campaign) => {
+                    return campaign.id !== event.target.value;
+                  });
+                  this.setState({ campaigns });
+                  
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+        }
       render(){
 
-        const delete_Campaign = () =>{
-            //Delete Campaign-Rest Call
-        }
+        
 
     return (
         <>
@@ -59,38 +68,19 @@ class CampaignList extends React.Component {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td><Button variant='danger'>x</Button></td>
-                                <td>Erdbeben</td>
-                                <td>100€</td>
-                                <td>45€</td>
-                                <td><a href='/createCampaign'>Editieren</a></td>
-                                <td><a href='/donationList'>Spendenliste</a></td>
-                                <td><a href='/fromular'>Formular</a></td>
-                            </tr>
                             {
                                 this.state.campaigns.map((val) =>(
-                            <tr>
-                                <td><Button variant='danger' onClick={delete_Campaign}>x</Button></td>
+                            <tr key={val.id}>
+                                <td><Button variant='danger' value={val.id} onClick={this.delete_Campaign}>x</Button></td>
                                 <td>{val.name}</td>
                                 <td>{val.targetAmount}</td>
                                 <td>{val.amountDonatedSoFar}</td>
-                                <td><a href='/createCampaign/'>Editieren</a></td>
-                                <td><a href='/donationList/'>Spendenliste</a></td>
-                                <td><a href='google.com'>Formular</a></td>
+                                <td><a href={'/editCampaign/'+ val.id}>Editieren</a></td>
+                                <td><a href={'/donationList/'+ val.id} >Spendenliste</a></td>
+                                <td><a href={'/editdonationform/'+ val.id}>Formular</a></td>
                             </tr>
                                 ))
                             }
-                            
-                            <tr>
-                            <td><Button variant='danger'>x</Button></td>
-                                <td>Trikots</td>
-                                <td>100€</td>
-                                <td>45€</td>
-                                <td><a href='/createCampaign'>Editieren</a></td>
-                                <td><a href='/donationList'>Spendenliste</a></td>
-                                <td><a href='google.com'>Formular</a></td>
-                            </tr>
                         </tbody>
                     </Table>
                 </Card.Body>
