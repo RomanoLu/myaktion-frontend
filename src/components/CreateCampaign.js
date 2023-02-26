@@ -12,7 +12,6 @@ import { useNavigate } from 'react-router-dom';
 function CreateCampaign() {
   const navigate = useNavigate();
   const [campaign, setCampaign] = useState({});  
-  const [account] = useState({});
   const [success, setSuccess] = useState(false);
 
   const handleNameChange = (event) => {
@@ -28,20 +27,17 @@ function CreateCampaign() {
   }
 
   const handleIbanChange = (event) => {
-    setCampaign({...account, iban: event.target.value});    
-    setCampaign({...campaign, account: account});
-  }
+   setCampaign(prevDonation => ({ ...prevDonation, account: { ...prevDonation.account, iban: event.target.value } }));
+   }
 
   const handleBanknameChange = (event) => {
-    setCampaign({...account, nameOfBank: event.target.value});
-    setCampaign({...campaign, account: account});
-
+   setCampaign(prevDonation => ({ ...prevDonation, account: { ...prevDonation.account, nameOfBank: event.target.value } }));
+ 
   }
 
   const handleAccNameChange = (event) =>{
-    setCampaign({...account, name: event.target.value});
-    setCampaign({...campaign, account: account});
-  }
+   setCampaign(prevDonation => ({ ...prevDonation, account: { ...prevDonation.account, name: event.target.value } }));
+   }
     
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -83,11 +79,11 @@ function CreateCampaign() {
                 <Form onSubmit={handleSubmit}>
                     <Form.Group className="mb-3" controlId="formBasicEmail">
                         <Form.Label>Name</Form.Label>
-                        <Form.Control type="text" placeholder="Enter name of your campaign " onChange={handleNameChange} />
+                        <Form.Control type="text" placeholder="Enter name of your campaign " onChange={handleNameChange} required minLength={4} maxLength={30}/>
                         <Form.Label>Spendenziel</Form.Label>
-                        <Form.Control type="text" placeholder="Enter Your donaitiongoal" onChange={handleSpendenzielChange} />
+                        <Form.Control type="text" placeholder="Enter Your donaitiongoal" onChange={handleSpendenzielChange} required min={10}/>
                         <Form.Label>Spendenbetrag</Form.Label>
-                        <Form.Control type="text" placeholder="Enter the donaitionamount" onChange={handleSpendenbetragChange} />
+                        <Form.Control type="text" placeholder="Enter the donaitionamount" onChange={handleSpendenbetragChange} required min={1}/>
                     </Form.Group>
                     <Form.Group className="mb-3" controlId="formBasicButton">
                         <Button variant="primary" type="submit">
@@ -107,12 +103,12 @@ function CreateCampaign() {
             <Tab eventKey="profile" title="Bankverbindung">
                 <Form onSubmit={handleSubmit}>
                     <Form.Group className="mb-3" controlId="formBasicEmail">
-                        <Form.Label>Name</Form.Label>
-                        <Form.Control type="text" placeholder="Enter Your name"  onChange={handleAccNameChange} />
+                        <Form.Label  >Name</Form.Label>
+                        <Form.Control type="text" placeholder="Enter Your name" required minLength={5} maxLength={60}  onChange={handleAccNameChange} />
                         <Form.Label>IBAN</Form.Label>
-                        <Form.Control type="text" placeholder="Enter Your IBAN"  onChange={handleIbanChange} />
+                        <Form.Control type="text" placeholder="Enter Your IBAN"  onChange={handleIbanChange}  required minLength={4} maxLength={30}/>
                         <Form.Label>Name der Bank</Form.Label>
-                        <Form.Control type="text" placeholder="Enter the name of Your bank" onChange={handleBanknameChange} />
+                        <Form.Control type="text" placeholder="Enter the name of Your bank" onChange={handleBanknameChange}  required pattern="[A-Z]{2}[0-9]{2}[A-Z0-9]{12,30}" />
                     </Form.Group>
                     <Form.Group className="mb-3" controlId="formBasicButton">
                         <Button variant="primary" type="submit" >

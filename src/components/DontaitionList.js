@@ -43,7 +43,7 @@ function DonationList() {
                         <tbody>
                            {
                                 data.map((val) => (
-                                <tr>
+                                <tr key={val.id}>
                                 <td>{val.donorName || "null"}</td>
                                 <td>{val.account?.iban || "null"}</td>
                                 <td>{val.account?.nameOfBank || "null"}</td>

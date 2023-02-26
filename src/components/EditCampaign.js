@@ -9,7 +9,7 @@ import axios from "axios";
 function EditCampaign() {
   const { dynamicProp } = useParams();
   const [campaign, setCampaign] = useState({});
-  const [account, setAccount] = useState({});
+  
   const [name, setName] = useState("");
   const [spendenziel, setSpendenziel] = useState("");
   const [spendenbetrag, setSpendenbetrag] = useState("");
@@ -20,6 +20,7 @@ function EditCampaign() {
   useEffect(() => {
     axios.get(`http://localhost:8443/organizer/campaign/${dynamicProp}`)
       .then(res => {
+        console.log("iban "+res.data.account.iban);
         setCampaign(res.data);
         setName(res.data.name);
         setSpendenziel(res.data.targetAmount);
@@ -27,7 +28,6 @@ function EditCampaign() {
         setIban(res.data.account.iban);
         setBankname(res.data.account.nameOfBank);
         setnameacc(res.data.account.name);
-        setAccount(res.data.account)
       })
       .catch(err => console.log(err));
   }, [dynamicProp]);
@@ -47,26 +47,23 @@ function EditCampaign() {
     setCampaign({...campaign, donationMinimum: event.target.value});
   }
 
+  const handleAccNameChange = (event) => {
+    setCampaign(prevDonation => ({ ...prevDonation, account: { ...prevDonation.account, name: event.target.value } }));
+  }
+
   const handleIbanChange = (event) => {
-    setIban(event.target.value);
-    setCampaign({...account, iban: event.target.value});    
-    setCampaign({...campaign, account: account});
+    setCampaign(prevDonation => ({ ...prevDonation, account: { ...prevDonation.account, iban: event.target.value } }));
   }
 
   const handleBanknameChange = (event) => {
-    setBankname(event.target.value);
-    setCampaign({...account, nameOfBank: event.target.value});
-    setCampaign({...campaign, account: account});
-
+    setCampaign(prevDonation => ({ ...prevDonation, account: { ...prevDonation.account, nameOfBank: event.target.value } }));
   }
 
-  const handleAccNameChange = (event) =>{
-    setnameacc(event.target.value);
-    setCampaign({...account, name: event.target.value});
-    setCampaign({...campaign, account: account});
-  }
+
+
 
   const handleSubmit = (event) => {
+  console.log(campaign);
     event.preventDefault();
     axios.put(`http://localhost:8443/organizer/campaign/${dynamicProp}`, campaign)
       .then(res => console.log(res))
