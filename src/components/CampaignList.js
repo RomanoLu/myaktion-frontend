@@ -3,6 +3,7 @@ import Table from 'react-bootstrap/Table';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Axios from "axios";
 import React from 'react';
+import Cookies from 'js-cookie';
 
 
 class CampaignList extends React.Component {
@@ -15,7 +16,12 @@ class CampaignList extends React.Component {
 
 
     componentDidMount() {
-        Axios.get("http://localhost:8443/organizer/campaign/list")
+        const jwt = Cookies.get("jwt");
+        Axios.get("http://localhost:8443/organizer/campaign/list", {
+            headers: {
+              Authorization: `Bearer ${jwt}` // Das JWT-Token als Bearer-Token im Authorization-Header hinzufügen
+            }
+          })
           .then((response) => {
             const campaigns = response.data;
             this.setState({ campaigns });
@@ -26,8 +32,13 @@ class CampaignList extends React.Component {
           });
       }
         delete_Campaign = (event) =>{
+            const jwt = Cookies.get("jwt");
             console.log("Event Value: " + event.target.value);
-            Axios.delete("http://localhost:8443/organizer/campaign/" + event.target.value)
+            Axios.delete("http://localhost:8443/organizer/campaign/" + event.target.value, {
+                headers: {
+                  Authorization: `Bearer ${jwt}` // Das JWT-Token als Bearer-Token im Authorization-Header hinzufügen
+                }
+              })
             .then((response) => {
                 console.log(response);
                 const campaigns = this.state.campaigns.filter((campaign) => {

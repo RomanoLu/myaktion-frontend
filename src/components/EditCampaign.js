@@ -5,6 +5,7 @@ import Form from 'react-bootstrap/Form';
 import Tabs from 'react-bootstrap/Tabs';
 import { useParams } from 'react-router-dom';
 import axios from "axios";
+import Cookies from "js-cookie";
 
 function EditCampaign() {
   const { dynamicProp } = useParams();
@@ -18,7 +19,12 @@ function EditCampaign() {
   const [nameacc, setnameacc] = useState('');
 
   useEffect(() => {
-    axios.get(`http://localhost:8443/organizer/campaign/${dynamicProp}`)
+    const jwt = Cookies.get("jwt");
+    axios.get(`http://localhost:8443/organizer/campaign/${dynamicProp}`, {
+      headers: {
+        Authorization: `Bearer ${jwt}` // Das JWT-Token als Bearer-Token im Authorization-Header hinzufügen
+      }
+    })
       .then(res => {
         console.log("iban "+res.data.account.iban);
         setCampaign(res.data);
@@ -63,9 +69,14 @@ function EditCampaign() {
 
 
   const handleSubmit = (event) => {
+    const jwt = Cookies.get("jwt");
   console.log(campaign);
     event.preventDefault();
-    axios.put(`http://localhost:8443/organizer/campaign/${dynamicProp}`, campaign)
+    axios.put(`http://localhost:8443/organizer/campaign/${dynamicProp}`, campaign, {
+      headers: {
+        Authorization: `Bearer ${jwt}` // Das JWT-Token als Bearer-Token im Authorization-Header hinzufügen
+      }
+    })
       .then(res => console.log(res))
       .catch(err => console.log(err));
   }

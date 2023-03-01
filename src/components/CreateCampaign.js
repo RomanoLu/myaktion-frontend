@@ -6,6 +6,7 @@ import Tabs from 'react-bootstrap/Tabs';
 import Alert from 'react-bootstrap/Alert';
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
+import Cookies from "js-cookie";
 
 
 
@@ -40,8 +41,13 @@ function CreateCampaign() {
    }
     
   const handleSubmit = (event) => {
+    const jwt = Cookies.get("jwt")
     event.preventDefault();
-    axios.post(`http://localhost:8443/organizer/campaign/`, campaign)
+    axios.post(`http://localhost:8443/organizer/campaign/`, campaign, {
+      headers: {
+        Authorization: `Bearer ${jwt}` // Das JWT-Token als Bearer-Token im Authorization-Header hinzufügen
+      }
+    })
       .then(res =>{
         console.log(res);
         setSuccess(true)
