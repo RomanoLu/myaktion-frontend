@@ -11,6 +11,7 @@ import Cookies from "js-cookie";
 
 
 function CreateCampaign() {
+  const apiBaseUrl = process.env.MYAKTION_URL || "http://localhost:8443";
   const navigate = useNavigate();
   const [campaign, setCampaign] = useState({});  
   const [success, setSuccess] = useState(false);
@@ -43,7 +44,7 @@ function CreateCampaign() {
   const handleSubmit = (event) => {
     const jwt = Cookies.get("jwt")
     event.preventDefault();
-    axios.post(`http://localhost:8443/organizer/campaign/`, campaign, {
+    axios.post(`${apiBaseUrl}/organizer/campaign/`, campaign, {
       headers: {
         Authorization: `Bearer ${jwt}` // Das JWT-Token als Bearer-Token im Authorization-Header hinzufügen
       }

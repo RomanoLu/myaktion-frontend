@@ -4,22 +4,22 @@ import Form from 'react-bootstrap/Form';
 import { useParams } from 'react-router-dom';
 
 function DonationForm() {
-    
+    const apiBaseUrl = process.env.MYAKTION_URL || "http://localhost:8443";
     const { dynamicProp } = useParams();
     const [background, setBackground] = useState('f7f7f7');
     const [textColor, setTextColor] = useState('000000');
-    const [formUrl, setFormUrl] = useState(`http://localhost:3000/donationform/${dynamicProp}/${background}/${textColor}`);
+    const [formUrl, setFormUrl] = useState(`${apiBaseUrl}/donationform/${dynamicProp}/${background}/${textColor}`);
 
     const handleBackgroundChange = (event) => {
         const value = event.target.value.slice(1);
         setBackground(value);
-        setFormUrl(`http://localhost:3000/donationform/${dynamicProp}/${value}/${textColor}`);
+        setFormUrl(`${apiBaseUrl}/donationform/${dynamicProp}/${value}/${textColor}`);
     };
 
     const handleTextColorChange = (event) => {
         const value = event.target.value.slice(1);
         setTextColor(value);
-        setFormUrl(`http://localhost:3000/donationform/${dynamicProp}/${background}/${value}`);
+        setFormUrl(`${apiBaseUrl}/donationform/${dynamicProp}/${background}/${value}`);
     };
 
     const handleWholeUrlChange = (event) => {

@@ -8,6 +8,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 
 function EditCampaign() {
+  const apiBaseUrl = process.env.MYAKTION_URL || "http://localhost:8443";
   const { dynamicProp } = useParams();
   const [campaign, setCampaign] = useState({});
   
@@ -20,7 +21,7 @@ function EditCampaign() {
 
   useEffect(() => {
     const jwt = Cookies.get("jwt");
-    axios.get(`http://localhost:8443/organizer/campaign/${dynamicProp}`, {
+    axios.get(`${apiBaseUrl}/organizer/campaign/${dynamicProp}`, {
       headers: {
         Authorization: `Bearer ${jwt}` // Das JWT-Token als Bearer-Token im Authorization-Header hinzufügen
       }

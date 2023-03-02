@@ -6,12 +6,13 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 function DonationList() {
+    const apiBaseUrl = process.env.MYAKTION_URL || "http://localhost:8443";
     const { dynamicProp } = useParams();
     const [data, setData] = useState(null);
 
     useEffect(() => {
         axios
-        .get("http://localhost:8443/donation/organizer/donation/list/" + dynamicProp)
+        .get(`${apiBaseUrl}/donation/organizer/donation/list/` + dynamicProp)
         .then((response) => setData(response.data))
         .catch((error) => console.log(error));    
     

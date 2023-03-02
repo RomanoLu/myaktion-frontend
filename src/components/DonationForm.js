@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 
 function DonationForm() {
+  const apiBaseUrl = process.env.MYAKTION_URL || "http://localhost:8443";
   const { dynamicProp,  formcolor, textcolor  } = useParams();
   const navigate = useNavigate();
   const [donation, setDonation] = useState({ donorName: "", account: { iban: "", nameOfBank: "" }, amount: "", receiptRequested: false, status: "IN_PROCESS" });
@@ -35,7 +36,7 @@ function DonationForm() {
   const handleSubmit = (event) => {
     console.log(donation);
     event.preventDefault();
-    axios.post(`http://localhost:8443/donation/donation/` + dynamicProp , donation)
+    axios.post(`${apiBaseUrl}/donation/donation/` + dynamicProp , donation)
       .then(res =>{
         console.log(res);
         setSuccess(true)

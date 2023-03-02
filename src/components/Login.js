@@ -8,6 +8,7 @@ import { useState } from 'react';
 
 function Login() {
 
+  const apiBaseUrl = process.env.MYAKTION_URL || "http://localhost:8443";
   const [email, setEmail] = useState();
   const [passwort, setPasswort] = useState();
 
@@ -24,7 +25,7 @@ function Login() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    axios.post(`http://localhost:8443/login`, {
+    axios.post(`${apiBaseUrl}/login`, {
       email: email,
       password: passwort
     })

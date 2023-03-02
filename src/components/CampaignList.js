@@ -5,7 +5,7 @@ import Axios from "axios";
 import React from 'react';
 import Cookies from 'js-cookie';
 
-
+const apiBaseUrl = process.env.MYAKTION_URL || "http://localhost:8443";
 class CampaignList extends React.Component {
     constructor() {
         super();
@@ -17,7 +17,7 @@ class CampaignList extends React.Component {
 
     componentDidMount() {
         const jwt = Cookies.get("jwt");
-        Axios.get("http://localhost:8443/organizer/campaign/list", {
+        Axios.get(`${apiBaseUrl}/organizer/campaign/list`, {
             headers: {
               Authorization: `Bearer ${jwt}` // Das JWT-Token als Bearer-Token im Authorization-Header hinzufügen
             }
@@ -34,7 +34,7 @@ class CampaignList extends React.Component {
         delete_Campaign = (event) =>{
             const jwt = Cookies.get("jwt");
             console.log("Event Value: " + event.target.value);
-            Axios.delete("http://localhost:8443/organizer/campaign/" + event.target.value, {
+            Axios.delete("${apiBaseUrl}/organizer/campaign/" + event.target.value, {
                 headers: {
                   Authorization: `Bearer ${jwt}` // Das JWT-Token als Bearer-Token im Authorization-Header hinzufügen
                 }
