@@ -113,9 +113,9 @@ function CreateCampaign() {
                         <Form.Label  >Name</Form.Label>
                         <Form.Control type="text" placeholder="Enter Your name" required minLength={5} maxLength={60}  onChange={handleAccNameChange} />
                         <Form.Label>IBAN</Form.Label>
-                        <Form.Control type="text" placeholder="Enter Your IBAN"  onChange={handleIbanChange}  required minLength={4} maxLength={30}/>
+                        <Form.Control type="text" placeholder="Enter Your IBAN"  onChange={handleIbanChange} required pattern="[A-Z]{2}[0-9]{2}[A-Z0-9]{12,30}" />
                         <Form.Label>Name der Bank</Form.Label>
-                        <Form.Control type="text" placeholder="Enter the name of Your bank" onChange={handleBanknameChange}  required pattern="[A-Z]{2}[0-9]{2}[A-Z0-9]{12,30}" />
+                        <Form.Control type="text" placeholder="Enter the name of Your bank" onChange={handleBanknameChange} required minLength={4} maxLength={30}  />
                     </Form.Group>
                     <Form.Group className="mb-3" controlId="formBasicButton">
                         <Button variant="primary" type="submit" >

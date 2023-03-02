@@ -34,7 +34,7 @@ class CampaignList extends React.Component {
         delete_Campaign = (event) =>{
             const jwt = Cookies.get("jwt");
             console.log("Event Value: " + event.target.value);
-            Axios.delete("${apiBaseUrl}/organizer/campaign/" + event.target.value, {
+            Axios.delete(`${apiBaseUrl}/organizer/campaign/` + event.target.value, {
                 headers: {
                   Authorization: `Bearer ${jwt}` // Das JWT-Token als Bearer-Token im Authorization-Header hinzufügen
                 }

@@ -11,12 +11,12 @@ function EditCampaign() {
   const apiBaseUrl = process.env.MYAKTION_URL || "http://localhost:8443";
   const { dynamicProp } = useParams();
   const [campaign, setCampaign] = useState({});
-  
+
   const [name, setName] = useState("");
   const [spendenziel, setSpendenziel] = useState("");
   const [spendenbetrag, setSpendenbetrag] = useState("");
   const [iban, setIban] = useState("");
-  const [bankname, setBankname] = useState("");  
+  const [bankname, setBankname] = useState("");
   const [nameacc, setnameacc] = useState('');
 
   useEffect(() => {
@@ -27,7 +27,6 @@ function EditCampaign() {
       }
     })
       .then(res => {
-        console.log("iban "+res.data.account.iban);
         setCampaign(res.data);
         setName(res.data.name);
         setSpendenziel(res.data.targetAmount);
@@ -37,21 +36,21 @@ function EditCampaign() {
         setnameacc(res.data.account.name);
       })
       .catch(err => console.log(err));
-  }, [dynamicProp]);
+  }, [dynamicProp, apiBaseUrl]);
 
   const handleNameChange = (event) => {
     setName(event.target.value);
-    setCampaign({...campaign, name: event.target.value});
+    setCampaign({ ...campaign, name: event.target.value });
   }
 
   const handleSpendenzielChange = (event) => {
     setSpendenziel(event.target.value);
-    setCampaign({...campaign, targetAmount: event.target.value});
+    setCampaign({ ...campaign, targetAmount: event.target.value });
   }
 
   const handleSpendenbetragChange = (event) => {
     setSpendenbetrag(event.target.value);
-    setCampaign({...campaign, donationMinimum: event.target.value});
+    setCampaign({ ...campaign, donationMinimum: event.target.value });
   }
 
   const handleAccNameChange = (event) => {
@@ -66,14 +65,13 @@ function EditCampaign() {
     setCampaign(prevDonation => ({ ...prevDonation, account: { ...prevDonation.account, nameOfBank: event.target.value } }));
   }
 
-
-
-
   const handleSubmit = (event) => {
+    console.log("Submit wurde gedrückt");
     const jwt = Cookies.get("jwt");
-  console.log(campaign);
     event.preventDefault();
-    axios.put(`http://localhost:8443/organizer/campaign/${dynamicProp}`, campaign, {
+    console.log(campaign);
+    event.preventDefault();
+    axios.put(`${apiBaseUrl}/organizer/campaign/${dynamicProp}`, campaign, {
       headers: {
         Authorization: `Bearer ${jwt}` // Das JWT-Token als Bearer-Token im Authorization-Header hinzufügen
       }
@@ -84,68 +82,68 @@ function EditCampaign() {
 
   return (
     <>
-    <h1 style={{ textAlign: "left" }} >Aktionen Editieren</h1>
-    <div style={{ marginLeft: "10%", marginRight: "10%", width: "60%" }}>
+      <h1 style={{ textAlign: "left" }} >Aktionen Editieren</h1>
+      <div style={{ marginLeft: "10%", marginRight: "10%", width: "60%" }}>
 
         <Tabs
-            defaultActiveKey="profile"
-            className="mb-3"
+          defaultActiveKey="home"
+          className="mb-3"
         >
-            <Tab eventKey="home" title="Allgemein">
-                <Form onSubmit={handleSubmit}>
-                    <Form.Group className="mb-3" controlId="formBasicEmail">
-                        <Form.Label>Name</Form.Label>
-                        <Form.Control type="text" placeholder="Enter name of your campaign " value={name} onChange={handleNameChange} />
-                        <Form.Label>Spendenziel</Form.Label>
-                        <Form.Control type="text" placeholder="Enter Your donaitiongoal" value={spendenziel} onChange={handleSpendenzielChange} />
-                        <Form.Label>Spendenbetrag</Form.Label>
-                        <Form.Control type="text" placeholder="Enter the donaitionamount" value={spendenbetrag} onChange={handleSpendenbetragChange} />
-                    </Form.Group>
-                    <Form.Group className="mb-3" controlId="formBasicButton">
-                        <Button variant="primary" type="submit" href="/campaignList">
-                            Speichern
-                        </Button>
-                        <Button variant="secondary" type="" href="/campaignList">
-                            Abbrechen
-                        </Button>
-                    </Form.Group>
+          <Tab eventKey="home" title="Allgemein">
+            <Form>
+              <Form.Group className="mb-3" controlId="formBasicEmail">
+                <Form.Label>Name</Form.Label>
+                <Form.Control type="text" placeholder="Enter name of your campaign " value={name} onChange={handleNameChange} />
+                <Form.Label>Spendenziel</Form.Label>
+                <Form.Control type="text" placeholder="Enter Your donaitiongoal" value={spendenziel} onChange={handleSpendenzielChange} />
+                <Form.Label>Spendenbetrag</Form.Label>
+                <Form.Control type="text" placeholder="Enter the donaitionamount" value={spendenbetrag} onChange={handleSpendenbetragChange} />
+              </Form.Group>
+              <Form.Group className="mb-3" controlId="formBasicButton">
+                <Button variant="primary" type="submit" onClick={handleSubmit}>
+                  Speichern
+                </Button>
+                <Button variant="secondary" href="/campaignlist" >
+                  Abbrechen
+                </Button>
+              </Form.Group>
 
 
-                    <Form.Text className="text-muted">
-                    Änderen Sie hier ihre Campaign Info
-                    </Form.Text>
-                </Form>
-            </Tab>
-            <Tab eventKey="profile" title="Bankverbindung">
-                <Form onSubmit={handleSubmit}>
-                    <Form.Group className="mb-3" controlId="formBasicEmail">
-                        <Form.Label>Name</Form.Label>
-                        <Form.Control type="text" placeholder="Enter Your name" value={nameacc} onChange={handleAccNameChange} />
-                        <Form.Label>IBAN</Form.Label>
-                        <Form.Control type="text" placeholder="Enter Your IBAN" value={iban} onChange={handleIbanChange} />
-                        <Form.Label>Name der Bank</Form.Label>
-                        <Form.Control type="text" placeholder="Enter the name of Your bank" value={bankname} onChange={handleBanknameChange} />
-                    </Form.Group>
-                    <Form.Group className="mb-3" controlId="formBasicButton">
-                        <Button variant="primary" type="submit" href="/campaignList">
-                            Speichern
-                        </Button>
-                        <Button variant="secondary" type="" href="/campaignList">
-                            Abbrechen
-                        </Button>
-                    </Form.Group>
+              <Form.Text className="text-muted">
+                Änderen Sie hier ihre Campaign Info
+              </Form.Text>
+            </Form>
+          </Tab>
+          <Tab eventKey="profile" title="Bankverbindung">
+            <Form >
+              <Form.Group className="mb-3" controlId="formBasicBank">
+                <Form.Label>Name</Form.Label>
+                <Form.Control type="text" placeholder="Enter Your name" defaultValue={nameacc} onChange={handleAccNameChange} />
+                <Form.Label>IBAN</Form.Label>
+                <Form.Control type="text" placeholder="Enter Your IBAN" defaultValue={iban} onChange={handleIbanChange} />
+                <Form.Label>Name der Bank</Form.Label>
+                <Form.Control type="text" placeholder="Enter the name of Your bank" defaultValue={bankname} onChange={handleBanknameChange} />
+              </Form.Group>
+              <Form.Group className="mb-3" controlId="formBasicBankButton">
+                <Button variant="primary" type="submit" onClick={handleSubmit}>
+                  Speichern
+                </Button>
+                <Button variant="secondary" href="/campaignlist" >
+                  Abbrechen
+                </Button>
+              </Form.Group>
 
 
-                    <Form.Text className="text-muted">
-                        Änderen Sie hier ihre Account Info
-                    </Form.Text>
-                </Form>
-            </Tab>
+              <Form.Text className="text-muted">
+                Änderen Sie hier ihre Account Info
+              </Form.Text>
+            </Form>
+          </Tab>
 
         </Tabs>
-    </div>
-</>
-);
+      </div>
+    </>
+  );
 }
 
 export default EditCampaign;
