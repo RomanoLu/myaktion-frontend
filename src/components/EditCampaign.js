@@ -8,7 +8,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 
 function EditCampaign() {
-  const apiBaseUrl = process.env.MYAKTION_URL || "http://localhost:8443";
+  const apiBaseUrl = process.env.REACT_APP_MYAKTION_URL ;
   const { dynamicProp } = useParams();
   const [campaign, setCampaign] = useState({});
 

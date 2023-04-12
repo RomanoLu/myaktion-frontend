@@ -8,7 +8,7 @@ import { useState } from 'react';
 
 function Login() {
 
-  const apiBaseUrl = process.env.MYAKTION_URL || "http://localhost:8443";
+  const apiBaseUrl = process.env.REACT_APP_MYAKTION_URL;
   const [email, setEmail] = useState();
   const [passwort, setPasswort] = useState();
 

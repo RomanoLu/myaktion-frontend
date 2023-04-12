@@ -6,7 +6,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 function DonationList() {
-    const apiBaseUrl = process.env.MYAKTION_URL || "http://localhost:8443";
+    const apiBaseUrl = process.env.REACT_APP_MYAKTION_URL ;
     const { dynamicProp } = useParams();
     const [data, setData] = useState(null);
 

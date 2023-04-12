@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 
 function DonationForm() {
-  const apiBaseUrl = process.env.MYAKTION_URL || "http://localhost:8443";
+  const apiBaseUrl = process.env.REACT_APP_MYAKTION_URL ;
   const { dynamicProp,  formcolor, textcolor  } = useParams();
   const navigate = useNavigate();
   const [donation, setDonation] = useState({ donorName: "", account: { iban: "", nameOfBank: "" }, amount: "", receiptRequested: false, status: "IN_PROCESS" });

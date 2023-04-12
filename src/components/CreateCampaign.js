@@ -11,7 +11,7 @@ import Cookies from "js-cookie";
 
 
 function CreateCampaign() {
-  const apiBaseUrl = process.env.MYAKTION_URL || "http://localhost:8443";
+  const apiBaseUrl = process.env.REACT_APP_MYAKTION_URL;
   const navigate = useNavigate();
   const [campaign, setCampaign] = useState({});  
   const [success, setSuccess] = useState(false);
